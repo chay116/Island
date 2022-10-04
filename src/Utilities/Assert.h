@@ -12,6 +12,12 @@
 #include <Foundation/NSString.hpp>
 #include <iostream>
 
+#define CLASS_PTR(klassName) \
+class klassName; \
+using klassName ## UPtr = std::unique_ptr<klassName>; \
+using klassName ## SPtr = std::shared_ptr<klassName>; \
+using klassName ## WPtr = std::weak_ptr<klassName>;
+
 static inline void CHA_PRINT()
 {
     std::cout << std::endl;

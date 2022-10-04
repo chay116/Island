@@ -17,10 +17,7 @@ class Camera
 private:
     void setDirection();
 
-    // Internally generated camera uniforms used/defined by the renderer
     CameraUniforms m_uniforms;
-
-    // A boolean value that denotes if the intenral uniforms structure needs rebuilding
     bool m_uniformsDirty;
     float m_viewAngle;
     float m_width;

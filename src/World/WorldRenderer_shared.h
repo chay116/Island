@@ -20,6 +20,7 @@ struct CameraUniforms
     simd::float4x4      invViewProjectionMatrix;
     simd::float4x4      invProjectionMatrix;
     simd::float4x4      invViewMatrix;
+    simd::float4        frustumPlanes[6];
 };
 
 struct Uniforms
@@ -36,7 +37,7 @@ struct Uniforms
     float               ambientOcclusionScale;
     float               ambientLightScale;
     float               gameTime;
-    float               frameTime;  // TODO. this doesn't appear to be initialized until UpdateCpuUniforms. OK?
+    float               frameTime;
 };
 
 struct DebugVertex
@@ -45,7 +46,6 @@ struct DebugVertex
     simd::float4        color;
 };
 
-// Describes our standardized OBJ format geometry vertex format
 struct ObjVertex
 {
     simd::float3        position;

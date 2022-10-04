@@ -30,7 +30,7 @@ struct CameraKeypoint
     simd::float3 position;  // Position of the keypoint.
     float        cameraPitch;
     float        cameraYaw;
-    float        movementSpeed { 0.2f };
+    float        movementSpeed { 20.f };
     bool         used {false};
 };
 

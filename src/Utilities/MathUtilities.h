@@ -16,9 +16,9 @@
 // Because these are common methods, allow other libraries to overload their implementation.
 #define AAPL_SIMD_OVERLOAD __attribute__((__overloadable__))
 
-// Self-Made
 matrix_float4x4 sInvMatrixLookat(vector_float3 inEye, vector_float3 inTo, vector_float3 inUp);
 
+vector_float4 AAPL_SIMD_OVERLOAD sPlaneNormalize(const vector_float4& inPlane);
 matrix_float3x3 AAPL_SIMD_OVERLOAD matrix3x3_XRotation(float a); // radian
 matrix_float3x3 AAPL_SIMD_OVERLOAD matrix3x3_YRotation(float a); // radian
 matrix_float3x3 AAPL_SIMD_OVERLOAD matrix3x3_ZRotation(float a); // radian

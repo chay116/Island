@@ -64,29 +64,21 @@ enum Controls
 // Stores information about a touch.
 @interface Touch : NSObject
 
-    @property simd::float2 pos;         // Current position.
+    @property simd::float2 pos;
     @property simd::float2 startPos;    // Starting position of touch.
     @property simd::float2 delta;       // Offset of touch this frame.
 
 @end
 
-// Encapsulates all of the inputs to be passed to subsystems.
 struct Input
 {
-    // Array of keys currently pressed.
     NSMutableSet<NSNumber*>*    pressedKeys;
-    // Array of keys pressed this frame.
     NSMutableSet<NSNumber*>*    justDownKeys;
-    // Mouse movement this frame.
     float                       mouseDeltaX;
     float                       mouseDeltaY;
-    // Flag to indicate that the mouse button was pressed.
     bool                        mouseDown;
-    // Flag to indicate that the mouse button was pressed.
     bool                        rightMouseDown;
-    // Location of mouse pointer when the button was pressed.
     simd::float2                mouseDownPos;
-    // Location of mouse pointer.
     simd::float2                mouseCurrentPos;
 
     // Array of touches in progress.
@@ -97,40 +89,6 @@ struct Input
     void update();
     void clear();
 };
-
-// Stores a pointer to a flag and the key that toggles the flag.
-typedef struct
-{
-    bool*   state;
-    char    key;
-} StateToggle;
-
-// Stores a pointer to a state and the keys that cycle the state upto the
-//  specified maximum.
-typedef struct
-{
-    uint*   state;
-    char    forwardKey;
-    char    backKey;
-    int     max;
-} StateCycle;
-
-// Stores a pointer to a state and the keys that cycle the state upto the
-//  specified maximum, with a fixed step.
-typedef struct
-{
-    float*  state;
-    char    forwardKey;
-    char    backKey;
-    float   max;
-    float   step;
-} StateCycleFloat;
-
-// Toggles and cycles states based on the keys pressed during this frame.
-void processStateChanges(uint numStateToggles, const StateToggle* stateToggles,
-                         uint numStateCycles, const StateCycle* stateCycles,
-                         uint numStateCyclesFloat, const StateCycleFloat* stateCyclesFloat,
-                         NSSet<NSNumber*>* justDownKeys);
 
 
 #endif /* Input_hpp */

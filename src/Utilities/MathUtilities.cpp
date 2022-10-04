@@ -9,25 +9,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-/*
-See LICENSE folder for this sample’s licensing information.
-
-Abstract:
-Implementation of vector, matrix, and quaternion math utility functions useful for 3D graphics
- rendering with Metal
-
- Metal uses column-major matrices and column-vector inputs.
-
-    linearIndex     cr              example with reference elements
-     0  4  8 12     00 10 20 30     sx  10  20   tx
-     1  5  9 13 --> 01 11 21 31 --> 01  sy  21   ty
-     2  6 10 14     02 12 22 32     02  12  sz   tz
-     3  7 11 15     03 13 23 33     03  13  1/d  33
-
-  The "cr" names are for <column><row>
-*/
-
-// Self-Made
 
 matrix_float4x4 sInvMatrixLookat(vector_float3 inEye, vector_float3 inTo, vector_float3 inUp)
 {
@@ -39,6 +20,11 @@ matrix_float4x4 sInvMatrixLookat(vector_float3 inEye, vector_float3 inTo, vector
         vector_float4 { x.y, y.y, z.y, 0 },
         vector_float4 { x.z, y.z, z.z, 0 },
         vector_float4 { t.x, t.y, t.z, 1 }};
+}
+
+vector_float4 AAPL_SIMD_OVERLOAD sPlaneNormalize(const vector_float4& inPlane)
+{
+    return inPlane / simd::length(inPlane.xyz);
 }
 
 matrix_float4x4 AAPL_SIMD_OVERLOAD matrix_perspective(float fovyRadians, float aspect, float nearZ, float farZ) {

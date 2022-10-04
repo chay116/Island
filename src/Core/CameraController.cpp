@@ -137,8 +137,8 @@ void CameraController::moveDownward()
 
 void CameraController::mouseMove(float deltaX, float deltaY)
 {
-    float newYaw = m_pCamera->getYaw() + deltaX * m_cameraRotSpeed;
-    float newPitch = m_pCamera->getPitch() + deltaY * m_cameraRotSpeed;
+    float newYaw = m_pCamera->getYaw() - deltaX * m_cameraRotSpeed;
+    float newPitch = m_pCamera->getPitch() - deltaY * m_cameraRotSpeed;
     
     
     if (newYaw < 0.0f) newYaw += 360.0f;

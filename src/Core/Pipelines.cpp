@@ -9,42 +9,122 @@
 #include "Assert.h"
 
 namespace CHA {
-MTL::RenderPipelineState* createTessRenderPSO(MTL::Device* pDevice, MTL::Library* pShaderLibrary, MTL::VertexDescriptor* pVertexDescriptor, const NS::String* pVertexFunc, const NS::String* pFragmentFunc, const NS::String* pLabel) {
-    
+MTL::RenderPipelineState* createTessRenderPSO(MTL::Device* pDevice,
+                                              MTL::Library* pShaderLibrary,
+                                              MTL::VertexDescriptor* pVertexDescriptor,
+                                              const MTL::FunctionConstantValues* pconstValues,
+                                              const NS::String* pVertexFunc,
+                                              const NS::String* pFragmentFunc,
+                                              const NS::String* pLabel)
+{
     NS::Error* pError = nullptr;
     MTL::Function* pVertexFunction = nullptr;
     MTL::Function* pFragmentFunction = nullptr;
     
     if (pVertexFunc) {
-        pVertexFunction = pShaderLibrary->newFunction( pVertexFunc );
-        CHA_ASSERT( pVertexFunction, "Failed to load Vertex shader: ", pVertexFunc );
+        if (pconstValues)
+            pVertexFunction = pShaderLibrary->newFunction( pVertexFunc, pconstValues, &pError );
+        else
+            pVertexFunction = pShaderLibrary->newFunction( pVertexFunc );
+        CHA_ASSERT( (bool)pVertexFunction,
+                   "Failed to load Vertex shader: ",
+                   pVertexFunc );
     }
     if (pFragmentFunc) {
-        pFragmentFunction = pShaderLibrary->newFunction( pFragmentFunc );
-        CHA_ASSERT( pFragmentFunction, "Failed to load Fragment shader: ", pFragmentFunc );
+        if (pconstValues)
+            pFragmentFunction = pShaderLibrary->newFunction( pFragmentFunc, pconstValues, &pError );
+        else
+            pFragmentFunction = pShaderLibrary->newFunction( pFragmentFunc );
+        CHA_ASSERT( (bool)pFragmentFunction,
+                   "Failed to load Fragment shader: ",
+                   pFragmentFunction );
     }
     
-    MTL::RenderPipelineDescriptor* pRenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
-    pRenderPipelineDescriptor->setLabel( pLabel );
-    pRenderPipelineDescriptor->setVertexDescriptor( pVertexDescriptor );
-    pRenderPipelineDescriptor->setVertexFunction( pVertexFunction );
-    pRenderPipelineDescriptor->setFragmentFunction( pFragmentFunction );
-    pRenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat( g_colorPixelFormat );
-    pRenderPipelineDescriptor->setDepthAttachmentPixelFormat( g_depthStencilPixelFormat );
+    MTL::RenderPipelineDescriptor* pRenderPipeDesc = MTL::RenderPipelineDescriptor::alloc()->init();
+    pRenderPipeDesc->setSampleCount( 1 );
+    pRenderPipeDesc->setLabel( pLabel );
+    pRenderPipeDesc->setVertexDescriptor( pVertexDescriptor );
+    pRenderPipeDesc->setVertexFunction( pVertexFunction );
+    pRenderPipeDesc->setFragmentFunction( pFragmentFunction );
     
-    pRenderPipelineDescriptor->setVertexDescriptor(pVertexDescriptor);
-    pRenderPipelineDescriptor->setTessellationFactorStepFunction(MTL::TessellationFactorStepFunctionPerPatch);
-    pRenderPipelineDescriptor->setMaxTessellationFactor(64);
-    pRenderPipelineDescriptor->setTessellationPartitionMode(MTL::TessellationPartitionModePow2);
+    pRenderPipeDesc->colorAttachments()->object(0)->setPixelFormat( MTL::PixelFormatBGRA8Unorm_sRGB );
+    pRenderPipeDesc->colorAttachments()->object(1)->setPixelFormat( MTL::PixelFormatRGBA8Unorm );
+    pRenderPipeDesc->setDepthAttachmentPixelFormat( MTL::PixelFormatDepth32Float_Stencil8 );
     
-    MTL::RenderPipelineState* pPipelineState = pDevice->newRenderPipelineState(pRenderPipelineDescriptor, &pError);
+    pRenderPipeDesc->setTessellationFactorFormat( MTL::TessellationFactorFormatHalf );
+    pRenderPipeDesc->setTessellationPartitionMode( MTL::TessellationPartitionModeFractionalOdd );
+    pRenderPipeDesc->setTessellationFactorStepFunction( MTL::TessellationFactorStepFunctionPerPatch );
+    pRenderPipeDesc->setTessellationControlPointIndexType( MTL::TessellationControlPointIndexTypeNone );
+    pRenderPipeDesc->setMaxTessellationFactor( 16 );
+    
+    
+    // A good optimization that improves driver performance is to state when a pipeline will
+    // modify an argument buffer or not. Doing this saves cache invalidations and memory fetches.
+    // Because we know ahad of time that the terrain parameters Argument Buffer will never be modified, we
+    // mark the slot immutable that it will be bound to.
+    
+    // Create the regular pipeline. This is used later on
+    pRenderPipeDesc->fragmentBuffers()->object(1)->setMutability(MTL::MutabilityImmutable);
+    
+    MTL::RenderPipelineState* pPipelineState = pDevice->newRenderPipelineState(pRenderPipeDesc, &pError);
     CHA_ASSERT_NULL_ERROR( pError, "Failed to create Render Pipeline State: ", pLabel);
-    pRenderPipelineDescriptor->release();
+    pRenderPipeDesc->release();
     if (pVertexFunction) pVertexFunction->release();
     if (pFragmentFunction) pFragmentFunction->release();
-    
     return pPipelineState;
 }
+
+
+MTL::RenderPipelineState* createVegRenderPSO(MTL::Device* pDevice,
+                                             MTL::Library* pShaderLibrary,
+                                             MTL::VertexDescriptor* pVertexDescriptor,
+                                             const MTL::FunctionConstantValues* pconstValues,
+                                             const NS::String* pVertexFunc,
+                                             const NS::String* pFragmentFunc,
+                                             const NS::String* pLabel)
+{
+    NS::Error* pError = nullptr;
+    MTL::Function* pVertexFunction = nullptr;
+    MTL::Function* pFragmentFunction = nullptr;
+    
+    if (pVertexFunc) {
+        if (pconstValues)
+            pVertexFunction = pShaderLibrary->newFunction( pVertexFunc, pconstValues, &pError );
+        else
+            pVertexFunction = pShaderLibrary->newFunction( pVertexFunc );
+        CHA_ASSERT( (bool)pVertexFunction,
+                   "Failed to load Vertex shader: ",
+                   pVertexFunc );
+    }
+    if (pFragmentFunc) {
+        if (pconstValues)
+            pFragmentFunction = pShaderLibrary->newFunction( pFragmentFunc, pconstValues, &pError );
+        else
+            pFragmentFunction = pShaderLibrary->newFunction( pFragmentFunc );
+        CHA_ASSERT( (bool)pFragmentFunction,
+                   "Failed to load Fragment shader: ",
+                   pFragmentFunction );
+    }
+    
+    MTL::RenderPipelineDescriptor* pRenderPipeDesc = MTL::RenderPipelineDescriptor::alloc()->init();
+    pRenderPipeDesc->setSampleCount( 1 );
+    pRenderPipeDesc->setLabel( pLabel );
+    pRenderPipeDesc->setVertexDescriptor( pVertexDescriptor );
+    pRenderPipeDesc->setVertexFunction( pVertexFunction );
+    pRenderPipeDesc->setFragmentFunction( pFragmentFunction );
+    
+    pRenderPipeDesc->colorAttachments()->object(0)->setPixelFormat( MTL::PixelFormatBGRA8Unorm_sRGB );
+    pRenderPipeDesc->colorAttachments()->object(1)->setPixelFormat( MTL::PixelFormatRGBA8Unorm );
+    pRenderPipeDesc->setDepthAttachmentPixelFormat( MTL::PixelFormatDepth32Float_Stencil8 );
+    
+    MTL::RenderPipelineState* pPipelineState = pDevice->newRenderPipelineState(pRenderPipeDesc, &pError);
+    CHA_ASSERT_NULL_ERROR( pError, "Failed to create Render Pipeline State: ", pLabel);
+    pRenderPipeDesc->release();
+    if (pVertexFunction) pVertexFunction->release();
+    if (pFragmentFunction) pFragmentFunction->release();
+    return pPipelineState;
+}
+
 
 MTL::RenderPipelineState* createRenderPSO(MTL::Device* pDevice,
                                           MTL::Library* pShaderLibrary,
@@ -67,24 +147,20 @@ MTL::RenderPipelineState* createRenderPSO(MTL::Device* pDevice,
         CHA_ASSERT( pFragmentFunction, "Failed to load Fragment shader: ", pFragmentFunc );
     }
 
-    MTL::RenderPipelineDescriptor* pRenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
-    pRenderPipelineDescriptor->setLabel( pLabel );
-    pRenderPipelineDescriptor->setVertexDescriptor( pDefaultVertexDescriptor );
-    pRenderPipelineDescriptor->setVertexFunction( pVertexFunction );
-    pRenderPipelineDescriptor->setFragmentFunction( pFragmentFunction );
-    pRenderPipelineDescriptor->setSampleCount(1);
-    pRenderPipelineDescriptor->colorAttachments()->object(0)->setPixelFormat( g_colorPixelFormat );
+    MTL::RenderPipelineDescriptor* pRenderPipeDesc = MTL::RenderPipelineDescriptor::alloc()->init();
+    pRenderPipeDesc->setLabel( pLabel );
+    pRenderPipeDesc->setVertexDescriptor( pDefaultVertexDescriptor );
+    pRenderPipeDesc->setVertexFunction( pVertexFunction );
+    pRenderPipeDesc->setFragmentFunction( pFragmentFunction );
+    pRenderPipeDesc->setSampleCount(1);
+    pRenderPipeDesc->colorAttachments()->object(0)->setPixelFormat( g_colorPixelFormat );
     
-//    pRenderPipelineDescriptor->colorAttachments()->object(RenderTargetLighting)->setPixelFormat( g_colorPixelFormat );
-//    pRenderPipelineDescriptor->colorAttachments()->object(RenderTargetAlbedo)->setPixelFormat( g_albedo_specular_GBufferFormat );
-//    pRenderPipelineDescriptor->colorAttachments()->object(RenderTargetNormal)->setPixelFormat( g_normal_shadow_GBufferFormat );
-//    pRenderPipelineDescriptor->colorAttachments()->object(RenderTargetDepth)->setPixelFormat( g_depth_GBufferFormat );
-    pRenderPipelineDescriptor->setDepthAttachmentPixelFormat( g_depthStencilPixelFormat );
-    pRenderPipelineDescriptor->setStencilAttachmentPixelFormat( g_depthStencilPixelFormat );
+    pRenderPipeDesc->setDepthAttachmentPixelFormat( g_depthStencilPixelFormat );
+    pRenderPipeDesc->setStencilAttachmentPixelFormat( g_depthStencilPixelFormat );
     
-    MTL::RenderPipelineState* pPipelineState = pDevice->newRenderPipelineState(pRenderPipelineDescriptor, &pError);
+    MTL::RenderPipelineState* pPipelineState = pDevice->newRenderPipelineState(pRenderPipeDesc, &pError);
     CHA_ASSERT_NULL_ERROR( pError, "Failed to create Render Pipeline State: ", pLabel);
-    pRenderPipelineDescriptor->release();
+    pRenderPipeDesc->release();
     if (pVertexFunction) pVertexFunction->release();
     if (pFragmentFunction) pFragmentFunction->release();
     
@@ -106,62 +182,110 @@ MTL::RenderPipelineState* createRenderPSOwithBlend(MTL::Device* pDevice, MTL::Li
         CHA_ASSERT( pFragmentFunction, "Failed to load Fragment shader: ", pFragmentFunc );
     }
     
-    MTL::RenderPipelineDescriptor* pRenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
-    pRenderPipelineDescriptor->setLabel( pLabel );
-    pRenderPipelineDescriptor->setVertexDescriptor( pDefaultVertexDescriptor );
-    pRenderPipelineDescriptor->setVertexFunction( pVertexFunction );
-    pRenderPipelineDescriptor->setFragmentFunction( pFragmentFunction );
+    MTL::RenderPipelineDescriptor* pRenderPipeDesc = MTL::RenderPipelineDescriptor::alloc()->init();
+    pRenderPipeDesc->setLabel( pLabel );
+    pRenderPipeDesc->setVertexDescriptor( pDefaultVertexDescriptor );
+    pRenderPipeDesc->setVertexFunction( pVertexFunction );
+    pRenderPipeDesc->setFragmentFunction( pFragmentFunction );
     
-//    pRenderPipelineDescriptor->colorAttachments()->object(RenderTargetLighting)->setPixelFormat( g_colorPixelFormat );
-//    pRenderPipelineDescriptor->colorAttachments()->object(RenderTargetAlbedo)->setPixelFormat( g_albedo_specular_GBufferFormat );
-//    pRenderPipelineDescriptor->colorAttachments()->object(RenderTargetNormal)->setPixelFormat( g_normal_shadow_GBufferFormat );
-//    pRenderPipelineDescriptor->colorAttachments()->object(RenderTargetDepth)->setPixelFormat( g_depth_GBufferFormat );
-    pRenderPipelineDescriptor->setDepthAttachmentPixelFormat( g_depthStencilPixelFormat );
-    pRenderPipelineDescriptor->setStencilAttachmentPixelFormat( g_depthStencilPixelFormat);
+    pRenderPipeDesc->setDepthAttachmentPixelFormat( g_depthStencilPixelFormat );
+    pRenderPipeDesc->setStencilAttachmentPixelFormat( g_depthStencilPixelFormat);
     
-    // Because iOS renderer can perform GBuffer pass in final pass, any pipeline rendering in
-    // the final pass must take the GBuffers into account
-    pRenderPipelineDescriptor->colorAttachments()->object(0)->setBlendingEnabled( true );
-    pRenderPipelineDescriptor->colorAttachments()->object(0)->setRgbBlendOperation( MTL::BlendOperationAdd );
-    pRenderPipelineDescriptor->colorAttachments()->object(0)->setAlphaBlendOperation( MTL::BlendOperationAdd );
-    pRenderPipelineDescriptor->colorAttachments()->object(0)->setSourceRGBBlendFactor( MTL::BlendFactorSourceAlpha );
-    pRenderPipelineDescriptor->colorAttachments()->object(0)->setSourceAlphaBlendFactor ( MTL::BlendFactorSourceAlpha );
-    pRenderPipelineDescriptor->colorAttachments()->object(0)->setDestinationRGBBlendFactor( MTL::BlendFactorOne );
-    pRenderPipelineDescriptor->colorAttachments()->object(0)->setDestinationAlphaBlendFactor( MTL::BlendFactorOne );
+    pRenderPipeDesc->colorAttachments()->object(0)->setBlendingEnabled( true );
+    pRenderPipeDesc->colorAttachments()->object(0)->setRgbBlendOperation( MTL::BlendOperationAdd );
+    pRenderPipeDesc->colorAttachments()->object(0)->setAlphaBlendOperation( MTL::BlendOperationAdd );
+    pRenderPipeDesc->colorAttachments()->object(0)->setSourceRGBBlendFactor( MTL::BlendFactorSourceAlpha );
+    pRenderPipeDesc->colorAttachments()->object(0)->setSourceAlphaBlendFactor ( MTL::BlendFactorSourceAlpha );
+    pRenderPipeDesc->colorAttachments()->object(0)->setDestinationRGBBlendFactor( MTL::BlendFactorOne );
+    pRenderPipeDesc->colorAttachments()->object(0)->setDestinationAlphaBlendFactor( MTL::BlendFactorOne );
     
-    MTL::RenderPipelineState* pPipelineState = pDevice->newRenderPipelineState(pRenderPipelineDescriptor, &pError);
+    MTL::RenderPipelineState* pPipelineState = pDevice->newRenderPipelineState(pRenderPipeDesc, &pError);
     CHA_ASSERT_NULL_ERROR( pError, "Failed to create Render Pipeline State: ", pLabel);
-    pRenderPipelineDescriptor->release();
+    pRenderPipeDesc->release();
     if (pVertexFunction) pVertexFunction->release();
     if (pFragmentFunction) pFragmentFunction->release();
     
     return pPipelineState;
 }
 
-MTL::RenderPipelineState* creatShadowPSO(MTL::Device* pDevice, MTL::Library* pShaderLibrary, MTL::VertexDescriptor* pDefaultVertexDescriptor, const NS::String* pVertexFunc, const NS::String* pLabel) {
+
+MTL::RenderPipelineState* createLightingRenderPSO(MTL::Device* pDevice,
+                                          MTL::Library* pShaderLibrary,
+                                          MTL::VertexDescriptor* pDefaultVertexDescriptor,
+                                          const NS::String* pVertexFunc,
+                                          const NS::String* pFragmentFunc,
+                                          const NS::String* pLabel)
+{
     
     NS::Error* pError = nullptr;
     MTL::Function* pVertexFunction = nullptr;
-    
+    MTL::Function* pFragmentFunction = nullptr;
+
     if (pVertexFunc) {
         pVertexFunction = pShaderLibrary->newFunction( pVertexFunc );
         CHA_ASSERT( pVertexFunction, "Failed to load Vertex shader: ", pVertexFunc );
     }
+    if (pFragmentFunc) {
+        pFragmentFunction = pShaderLibrary->newFunction( pFragmentFunc );
+        CHA_ASSERT( pFragmentFunction, "Failed to load Fragment shader: ", pFragmentFunc );
+    }
+
+    MTL::RenderPipelineDescriptor* pRenderPipeDesc = MTL::RenderPipelineDescriptor::alloc()->init();
+    pRenderPipeDesc->setLabel( pLabel );
+    pRenderPipeDesc->setVertexDescriptor( pDefaultVertexDescriptor );
+    pRenderPipeDesc->setVertexFunction( pVertexFunction );
+    pRenderPipeDesc->setFragmentFunction( pFragmentFunction );
+    pRenderPipeDesc->setSampleCount(1);
+    pRenderPipeDesc->colorAttachments()->object(0)->setPixelFormat( MTL::PixelFormatBGRA8Unorm_sRGB );
     
-    MTL::RenderPipelineDescriptor* pRenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
-    pRenderPipelineDescriptor->setLabel( pLabel );
-    pRenderPipelineDescriptor->setVertexDescriptor( pDefaultVertexDescriptor );
-    pRenderPipelineDescriptor->setVertexFunction( pVertexFunction );
-    pRenderPipelineDescriptor->setFragmentFunction( nullptr );
-    pRenderPipelineDescriptor->setDepthAttachmentPixelFormat( MTL::PixelFormatDepth16Unorm );
-    
-    MTL::RenderPipelineState* pPipelineState = pDevice->newRenderPipelineState(pRenderPipelineDescriptor, &pError);
+    MTL::RenderPipelineState* pPipelineState = pDevice->newRenderPipelineState(pRenderPipeDesc, &pError);
     CHA_ASSERT_NULL_ERROR( pError, "Failed to create Render Pipeline State: ", pLabel);
-    pRenderPipelineDescriptor->release();
+    pRenderPipeDesc->release();
+    if (pVertexFunction) pVertexFunction->release();
+    if (pFragmentFunction) pFragmentFunction->release();
+    
+    return pPipelineState;
+}
+
+
+MTL::RenderPipelineState* creatShadowPSO(MTL::Device* pDevice,
+                                         MTL::Library* pShaderLibrary,
+                                         MTL::VertexDescriptor* pDefaultVertexDescriptor,
+                                         const MTL::FunctionConstantValues* pconstValues,
+                                         const NS::String* pVertexFunc,
+                                         const NS::String* pLabel)
+{
+    NS::Error* pError = nullptr;
+    MTL::Function* pVertexFunction = nullptr;
+    
+    if (pVertexFunc) {
+        if (pconstValues)
+            pVertexFunction = pShaderLibrary->newFunction( pVertexFunc, pconstValues, &pError );
+        else
+            pVertexFunction = pShaderLibrary->newFunction( pVertexFunc );
+        CHA_ASSERT( (bool)pVertexFunction,
+                   "Failed to load Vertex shader: ",
+                   pVertexFunc );
+    }
+    MTL::RenderPipelineDescriptor* pRenderPipeDesc = MTL::RenderPipelineDescriptor::alloc()->init();
+    pRenderPipeDesc->setLabel( pLabel );
+    pRenderPipeDesc->setVertexDescriptor( pDefaultVertexDescriptor );
+    pRenderPipeDesc->setVertexFunction( pVertexFunction );
+    pRenderPipeDesc->setFragmentFunction( nullptr );
+    
+    pRenderPipeDesc->colorAttachments()->object(0)->setPixelFormat( MTL::PixelFormatInvalid );
+    pRenderPipeDesc->colorAttachments()->object(1)->setPixelFormat( MTL::PixelFormatInvalid );
+    pRenderPipeDesc->setDepthAttachmentPixelFormat( g_shadowMapPixelFormat );
+    
+    MTL::RenderPipelineState* pPipelineState = pDevice->newRenderPipelineState(pRenderPipeDesc, &pError);
+    CHA_ASSERT_NULL_ERROR( pError, "Failed to create Render Pipeline State: ", pLabel);
+    pRenderPipeDesc->release();
     if (pVertexFunction) pVertexFunction->release();
     
     return pPipelineState;
 }
+
+
 
 MTL::ComputePipelineState* creatComputePSO(MTL::Device* pDevice, MTL::Library* pComputeLibrary, const NS::String* pComputeFunc, bool threadGroupSizeIsHwMultiple) {
 
@@ -179,44 +303,6 @@ MTL::ComputePipelineState* creatComputePSO(MTL::Device* pDevice, MTL::Library* p
     return pComputePipelineState;
 }
 
-MTL::RenderPipelineState* creatTessPSO(MTL::Device* pDevice, MTL::Library* pShaderLibrary, MTL::VertexDescriptor* pDefaultVertexDescriptor, const NS::String* pVertexFunc, const NS::String* pLabel) {
-
-//    NS::Error* pError = nullptr;
-//    MTL::Function* pVertexFunction = pShaderLibrary->newFunction( pVertexFunc );
-//    CHA_ASSERT( pVertexFunction, "Failed to load Vertex shader: ", pVertexFunc );
-//
-//    MTL::RenderPipelineDescriptor* pRenderPipelineDescriptor = MTL::RenderPipelineDescriptor::alloc()->init();
-//    pRenderPipelineDescriptor->setLabel( pLabel );
-//    pRenderPipelineDescriptor->setVertexDescriptor( pDefaultVertexDescriptor );
-//    pRenderPipelineDescriptor->setVertexFunction( pVertexFunction );
-//    pRenderPipelineDescriptor->setFragmentFunction( nullptr );
-//    pRenderPipelineDescriptor->setDepthAttachmentPixelFormat( MTL::PixelFormatDepth16Unorm );
-//
-    MTL::RenderPipelineState* pPipelineState = nullptr;
-//    CHA_ASSERT_NULL_ERROR( pError, "Failed to create Render Pipeline State: ", pLabel);
-//    pRenderPipelineDescriptor->release();
-//    pVertexFunction->release();
-
-//    MTL::CommandBuffer* pCommandBuffer = _pCommandQueue->commandBuffer();
-//    assert(pCommandBuffer);
-//
-//    MTL::ComputeCommandEncoder* pComputeEncoder = pCommandBuffer->computeCommandEncoder();
-//
-//    pComputeEncoder->setComputteePipelineState( _pComputePSO );
-//    pComputeEncoder->setTexture( _pTexture, 0 );
-//
-//    MTL::Size gridSize = MTL::Size( kTextureWidth, kTextureHeight, 1 );
-//
-//    NS::UInteger threadGroupSize = _pComputePSO->maxTotalThreadsPerThreadgroup();
-//    MTL::Size threadgroupSize( threadGroupSize, 1, 1 );
-//
-//    pComputeEncoder->dispatchThreads( gridSize, threadgroupSize );
-//
-//    pComputeEncoder->endEncoding();
-//
-//    pCommandBuffer->commit();
-    return pPipelineState;
-}
 
 
 }

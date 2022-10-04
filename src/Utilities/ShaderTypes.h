@@ -14,7 +14,6 @@
 #include <simd/simd.h>
 
 #ifndef __METAL_VERSION__
-/// 96-bit / 12 byte 3 component float vector type
 typedef struct __attribute__ ((packed)) packed_float3 {
     float x;
     float y;
@@ -22,8 +21,6 @@ typedef struct __attribute__ ((packed)) packed_float3 {
 } packed_float3;
 #endif
 
-// Buffer index values shared between shader and C code to ensure Metal shader buffer inputs match
-//   Metal API buffer set calls
 typedef enum BufferIndex
 {
     BufferIndexMeshPositions     = 0,
@@ -35,8 +32,6 @@ typedef enum BufferIndex
 
 } BufferIndex;
 
-// Attribute index values shared between shader and C code to ensure Metal shader vertex
-//   attribute indices match the Metal API vertex descriptor attribute indices
 typedef enum VertexAttributes
 {
     VertexAttributePosition  = 0,
@@ -46,8 +41,6 @@ typedef enum VertexAttributes
     VertexAttributeBitangent = 4
 } VertexAttributes;
 
-// Texture index values shared between shader and C code to ensure Metal shader texture indices
-//   match indices of Metal API texture set calls
 typedef enum TextureIndex
 {
     TextureIndexBaseColor = 0,
@@ -68,9 +61,6 @@ typedef enum RenderTargetIndex
     RenderTargetDepth     = 3
 } RenderTargetIndex;
 
-// Structures shared between shader and C code to ensure the layout of per frame data
-//    accessed in Metal shaders matches the layout of fra data set in C code
-//    Data constant across all threads, vertices, and fragments
 struct FrameData
 {
     // Per Frame Constants
@@ -98,7 +88,6 @@ struct FrameData
     float sun_specular_intensity;
 };
 
-// Per-light characteristics
 struct PointLight
 {
     simd::float3 light_color;
@@ -106,7 +95,6 @@ struct PointLight
     float light_speed;
 };
 
-// Simple vertex used to render the "fairies"
 struct SimpleVertex
 {
     simd::float2 position;

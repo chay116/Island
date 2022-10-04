@@ -21,6 +21,17 @@ MTL::DepthStencilState* buildBasicDepthStencilState(MTL::Device* pDevice) {
     return m_pTessDepthStencilState;
 }
 
+MTL::DepthStencilState* buildLightingDepthStencilState(MTL::Device* pDevice) {
+    MTL::DepthStencilDescriptor* pDepthStencilDesc = MTL::DepthStencilDescriptor::alloc()->init();
+    pDepthStencilDesc->setLabel( CHASTR( "Basic DepthStencil" ) );
+    pDepthStencilDesc->setDepthCompareFunction( MTL::CompareFunctionAlways );
+    pDepthStencilDesc->setDepthWriteEnabled( false );
+
+    MTL::DepthStencilState* m_pTessDepthStencilState = pDevice->newDepthStencilState( pDepthStencilDesc );
+    pDepthStencilDesc->release();
+    return m_pTessDepthStencilState;
+}
+
 MTL::DepthStencilState* buildGBufferDepthStencilState(MTL::Device* pDevice) {
     MTL::StencilDescriptor* pStencilStateDesc = MTL::StencilDescriptor::alloc()->init();
 #if LIGHT_STENCIL_CULLING
@@ -120,25 +131,25 @@ MTL::DepthStencilState* buildPointLightDepthStencilState(MTL::Device* pDevice) {
     return m_pLightMaskDepthStencilState;
 }
 
-//MTL::Texture* buildShadowMapTexture(MTL::Device* pDevice) {
-//    MTL::TextureDescriptor* pShadowTextureDesc = MTL::TextureDescriptor::alloc()->init();
-//
-//    pShadowTextureDesc->setPixelFormat( BufferFormats::shadowDepthFormat );
-//    pShadowTextureDesc->setWidth( 1024 );
-//    pShadowTextureDesc->setHeight( 1024 );
-//    pShadowTextureDesc->setMipmapLevelCount( 1 );
-//    pShadowTextureDesc->setResourceOptions( MTL::ResourceStorageModePrivate );
-//    pShadowTextureDesc->setTextureType(MTL::TextureType2DArray);
-//    pShadowTextureDesc->setArrayLength(NUM_CASCADES);
-//    pShadowTextureDesc->setUsage( MTL::TextureUsageRenderTarget | MTL::TextureUsageShaderRead );
-//
-//    MTL::Texture *m_pShadowMap = pDevice->newTexture( pShadowTextureDesc );
-//    m_pShadowMap->setLabel( CHASTR( "Shadow Map" ) );
-//    
-//    
-//    MTL::TextureDescriptor::texture2DDescriptor(BufferFormats::shadowDepthFormat, shadowWidth, shadowWidth, false);
-//    
-//    pShadowTextureDesc->release();
-//    return m_pShadowMap;
-//}
+MTL::Texture* buildShadowMapTexture(MTL::Device* pDevice) {
+    MTL::TextureDescriptor* pShadowTextureDesc = MTL::TextureDescriptor::alloc()->init();
+
+    pShadowTextureDesc->setPixelFormat( MTL::PixelFormatDepth32Float );
+    pShadowTextureDesc->setWidth( 1024 );
+    pShadowTextureDesc->setHeight( 1024 );
+    pShadowTextureDesc->setMipmapLevelCount( 1 );
+    pShadowTextureDesc->setResourceOptions( MTL::ResourceStorageModePrivate );
+    pShadowTextureDesc->setTextureType(MTL::TextureType2DArray);
+    pShadowTextureDesc->setArrayLength(NUM_CASCADES);
+    pShadowTextureDesc->setUsage( MTL::TextureUsageRenderTarget | MTL::TextureUsageShaderRead );
+
+    MTL::Texture *m_pShadowMap = pDevice->newTexture( pShadowTextureDesc );
+    m_pShadowMap->setLabel( CHASTR( "Shadow Map" ) );
+    
+    
+    MTL::TextureDescriptor::texture2DDescriptor(MTL::PixelFormatDepth32Float, shadowWidth, shadowWidth, false);
+    
+    pShadowTextureDesc->release();
+    return m_pShadowMap;
+}
 }

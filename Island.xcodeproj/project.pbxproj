@@ -8,21 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		515CE5DA28E0CC2600E75D1B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 515CE5D928E0CC2600E75D1B /* Main.storyboard */; };
+		5170ECE028E875DD0099371F /* ComputeNormalMap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5170ECDF28E875DD0099371F /* ComputeNormalMap.metal */; };
+		5170ECE228E876B10099371F /* CreateNewHeightMap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5170ECE128E876B10099371F /* CreateNewHeightMap.metal */; };
+		5170ECE428E87D410099371F /* ComputeOcclusionAndSlope.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5170ECE328E87D410099371F /* ComputeOcclusionAndSlope.metal */; };
+		5170ECE528E88EFE0099371F /* TerrainShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 51C989AA28E3A93600B853E1 /* TerrainShaders.metal */; };
 		519A18E128DE4FE700D1FB6A /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 519A18DF28DE4FE700D1FB6A /* Camera.cpp */; };
 		519A18E828DE50DF00D1FB6A /* MathUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 519A18E628DE50DF00D1FB6A /* MathUtilities.cpp */; };
 		519A18ED28DE874800D1FB6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D3F59C28DE12CA00390870 /* Foundation.framework */; };
 		51B72D5128DFCA1F009B7F2E /* Pipelines.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51B72D4F28DFCA1F009B7F2E /* Pipelines.cpp */; };
 		51B72D5528DFDDE9009B7F2E /* Texture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 51B72D5328DFDDE9009B7F2E /* Texture.mm */; };
 		51B72D5828DFDF25009B7F2E /* DepthStencil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51B72D5628DFDF25009B7F2E /* DepthStencil.cpp */; };
-		51B72D5B28DFF566009B7F2E /* Mesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = 51B72D5928DFF566009B7F2E /* Mesh.mm */; };
 		51C9899C28E24A8300B853E1 /* CameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51C9899A28E24A8300B853E1 /* CameraController.cpp */; };
 		51C9899F28E38B9500B853E1 /* Allocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51C9899D28E38B9500B853E1 /* Allocator.cpp */; };
+		51C989A628E3A65800B853E1 /* TerrainRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51C989A428E3A65800B853E1 /* TerrainRenderer.cpp */; };
+		51C989B628E5411C00B853E1 /* Tessellation.metal in Sources */ = {isa = PBXBuildFile; fileRef = 51C989B528E5411C00B853E1 /* Tessellation.metal */; };
+		51C989B828E5677800B853E1 /* WorldRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 51C989B728E5677800B853E1 /* WorldRenderer.metal */; };
 		51CF61DD28E0CEF800315F75 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 51CF61DC28E0CEF300315F75 /* Assets */; };
-		51CF61DF28E0D37800315F75 /* perlinMap.png in Resources */ = {isa = PBXBuildFile; fileRef = 51CF61DE28E0D37800315F75 /* perlinMap.png */; };
 		51D3F58428DE129E00390870 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D3F58328DE129E00390870 /* AppDelegate.m */; };
 		51D3F58728DE129E00390870 /* WorldRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51D3F58628DE129E00390870 /* WorldRenderer.cpp */; };
 		51D3F58A28DE129E00390870 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 51D3F58928DE129E00390870 /* ViewController.mm */; };
-		51D3F58C28DE129E00390870 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 51D3F58B28DE129E00390870 /* Shaders.metal */; };
 		51D3F59428DE129F00390870 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D3F59328DE129F00390870 /* main.m */; };
 		51D3F59F28DE12CF00390870 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D3F59E28DE12CE00390870 /* Metal.framework */; };
 		51D3F5A128DE12D200390870 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D3F5A028DE12D200390870 /* MetalKit.framework */; };
@@ -33,6 +37,9 @@
 
 /* Begin PBXFileReference section */
 		515CE5D928E0CC2600E75D1B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = macOS/Main.storyboard; sourceTree = "<group>"; };
+		5170ECDF28E875DD0099371F /* ComputeNormalMap.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ComputeNormalMap.metal; sourceTree = "<group>"; };
+		5170ECE128E876B10099371F /* CreateNewHeightMap.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CreateNewHeightMap.metal; sourceTree = "<group>"; };
+		5170ECE328E87D410099371F /* ComputeOcclusionAndSlope.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ComputeOcclusionAndSlope.metal; sourceTree = "<group>"; };
 		519A18DF28DE4FE700D1FB6A /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		519A18E028DE4FE700D1FB6A /* Camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
 		519A18E428DE504500D1FB6A /* WorldRenderer_shared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WorldRenderer_shared.h; sourceTree = "<group>"; };
@@ -45,15 +52,21 @@
 		51B72D5428DFDDE9009B7F2E /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		51B72D5628DFDF25009B7F2E /* DepthStencil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DepthStencil.cpp; sourceTree = "<group>"; };
 		51B72D5728DFDF25009B7F2E /* DepthStencil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DepthStencil.h; sourceTree = "<group>"; };
-		51B72D5928DFF566009B7F2E /* Mesh.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Mesh.mm; sourceTree = "<group>"; };
-		51B72D5A28DFF566009B7F2E /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
 		51B72D5C28E091B6009B7F2E /* metal-cpp-extensions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "metal-cpp-extensions"; sourceTree = "<group>"; };
 		51C9899A28E24A8300B853E1 /* CameraController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CameraController.cpp; sourceTree = "<group>"; };
 		51C9899B28E24A8300B853E1 /* CameraController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraController.h; sourceTree = "<group>"; };
 		51C9899D28E38B9500B853E1 /* Allocator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Allocator.cpp; sourceTree = "<group>"; };
 		51C9899E28E38B9500B853E1 /* Allocator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Allocator.h; sourceTree = "<group>"; };
+		51C989A428E3A65800B853E1 /* TerrainRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TerrainRenderer.cpp; sourceTree = "<group>"; };
+		51C989A528E3A65800B853E1 /* TerrainRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TerrainRenderer.h; sourceTree = "<group>"; };
+		51C989A828E3A76B00B853E1 /* TerrainRenderer_shared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TerrainRenderer_shared.h; sourceTree = "<group>"; };
+		51C989AA28E3A93600B853E1 /* TerrainShaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = TerrainShaders.metal; sourceTree = "<group>"; };
+		51C989AC28E3A95700B853E1 /* TerrainRendererUtilities.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = TerrainRendererUtilities.metal; sourceTree = "<group>"; };
+		51C989B028E3A9B000B853E1 /* GlobalParmeter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlobalParmeter.h; sourceTree = "<group>"; };
+		51C989B128E3AA0900B853E1 /* WorldRendererUtilities.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = WorldRendererUtilities.metal; sourceTree = "<group>"; };
+		51C989B528E5411C00B853E1 /* Tessellation.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Tessellation.metal; sourceTree = "<group>"; };
+		51C989B728E5677800B853E1 /* WorldRenderer.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = WorldRenderer.metal; sourceTree = "<group>"; };
 		51CF61DC28E0CEF300315F75 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
-		51CF61DE28E0D37800315F75 /* perlinMap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = perlinMap.png; sourceTree = "<group>"; };
 		51D3F57F28DE129E00390870 /* Island.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Island.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51D3F58228DE129E00390870 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		51D3F58328DE129E00390870 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -61,7 +74,6 @@
 		51D3F58628DE129E00390870 /* WorldRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WorldRenderer.cpp; sourceTree = "<group>"; };
 		51D3F58828DE129E00390870 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		51D3F58928DE129E00390870 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
-		51D3F58B28DE129E00390870 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		51D3F58D28DE129E00390870 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		51D3F59328DE129F00390870 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		51D3F59C28DE12CA00390870 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -91,6 +103,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5170ECDE28E875880099371F /* Metal */ = {
+			isa = PBXGroup;
+			children = (
+				51C989AA28E3A93600B853E1 /* TerrainShaders.metal */,
+				51C989AC28E3A95700B853E1 /* TerrainRendererUtilities.metal */,
+				51C989B528E5411C00B853E1 /* Tessellation.metal */,
+				5170ECDF28E875DD0099371F /* ComputeNormalMap.metal */,
+				5170ECE128E876B10099371F /* CreateNewHeightMap.metal */,
+				5170ECE328E87D410099371F /* ComputeOcclusionAndSlope.metal */,
+			);
+			path = Metal;
+			sourceTree = "<group>";
+		};
 		519A18DE28DE4F7F00D1FB6A /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -111,9 +136,11 @@
 		519A18E228DE501500D1FB6A /* World */ = {
 			isa = PBXGroup;
 			children = (
-				51D3F58528DE129E00390870 /* WorldRenderer.h */,
 				51D3F58628DE129E00390870 /* WorldRenderer.cpp */,
+				51D3F58528DE129E00390870 /* WorldRenderer.h */,
 				519A18E428DE504500D1FB6A /* WorldRenderer_shared.h */,
+				51C989B128E3AA0900B853E1 /* WorldRendererUtilities.metal */,
+				51C989B728E5677800B853E1 /* WorldRenderer.metal */,
 			);
 			path = World;
 			sourceTree = "<group>";
@@ -121,21 +148,31 @@
 		519A18E528DE50C700D1FB6A /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				51B72D5928DFF566009B7F2E /* Mesh.mm */,
-				51B72D5A28DFF566009B7F2E /* Mesh.h */,
 				519A18E628DE50DF00D1FB6A /* MathUtilities.cpp */,
 				519A18E728DE50DF00D1FB6A /* MathUtilities.h */,
 				51C9899D28E38B9500B853E1 /* Allocator.cpp */,
 				51C9899E28E38B9500B853E1 /* Allocator.h */,
 				519A18E928DE517D00D1FB6A /* Assert.h */,
+				51C989B028E3A9B000B853E1 /* GlobalParmeter.h */,
+				51D3F58D28DE129E00390870 /* ShaderTypes.h */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		51C989A328E3A64100B853E1 /* Terrain */ = {
+			isa = PBXGroup;
+			children = (
+				5170ECDE28E875880099371F /* Metal */,
+				51C989A428E3A65800B853E1 /* TerrainRenderer.cpp */,
+				51C989A528E3A65800B853E1 /* TerrainRenderer.h */,
+				51C989A828E3A76B00B853E1 /* TerrainRenderer_shared.h */,
+			);
+			path = Terrain;
 			sourceTree = "<group>";
 		};
 		51D3F57628DE129E00390870 = {
 			isa = PBXGroup;
 			children = (
-				51CF61DE28E0D37800315F75 /* perlinMap.png */,
 				51CF61DC28E0CEF300315F75 /* Assets */,
 				51B72D5C28E091B6009B7F2E /* metal-cpp-extensions */,
 				51D3F5A728DE132A00390870 /* metal-cpp */,
@@ -185,11 +222,10 @@
 		51D3F5A628DE130D00390870 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				519A18E528DE50C700D1FB6A /* Utilities */,
 				519A18E228DE501500D1FB6A /* World */,
+				51C989A328E3A64100B853E1 /* Terrain */,
+				519A18E528DE50C700D1FB6A /* Utilities */,
 				519A18DE28DE4F7F00D1FB6A /* Core */,
-				51D3F58B28DE129E00390870 /* Shaders.metal */,
-				51D3F58D28DE129E00390870 /* ShaderTypes.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -261,7 +297,6 @@
 			files = (
 				51CF61DD28E0CEF800315F75 /* Assets in Resources */,
 				515CE5DA28E0CC2600E75D1B /* Main.storyboard in Resources */,
-				51CF61DF28E0D37800315F75 /* perlinMap.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,19 +307,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5170ECE528E88EFE0099371F /* TerrainShaders.metal in Sources */,
 				519A18E828DE50DF00D1FB6A /* MathUtilities.cpp in Sources */,
+				5170ECE228E876B10099371F /* CreateNewHeightMap.metal in Sources */,
 				51D3F5B228DE176500390870 /* Input.mm in Sources */,
 				51C9899C28E24A8300B853E1 /* CameraController.cpp in Sources */,
 				51D3F59428DE129F00390870 /* main.m in Sources */,
 				519A18E128DE4FE700D1FB6A /* Camera.cpp in Sources */,
 				51C9899F28E38B9500B853E1 /* Allocator.cpp in Sources */,
-				51D3F58C28DE129E00390870 /* Shaders.metal in Sources */,
+				51C989B828E5677800B853E1 /* WorldRenderer.metal in Sources */,
+				51C989B628E5411C00B853E1 /* Tessellation.metal in Sources */,
 				51B72D5528DFDDE9009B7F2E /* Texture.mm in Sources */,
-				51B72D5B28DFF566009B7F2E /* Mesh.mm in Sources */,
 				51D3F58728DE129E00390870 /* WorldRenderer.cpp in Sources */,
 				51B72D5828DFDF25009B7F2E /* DepthStencil.cpp in Sources */,
+				5170ECE428E87D410099371F /* ComputeOcclusionAndSlope.metal in Sources */,
+				5170ECE028E875DD0099371F /* ComputeNormalMap.metal in Sources */,
 				51D3F58A28DE129E00390870 /* ViewController.mm in Sources */,
 				51D3F58428DE129E00390870 /* AppDelegate.m in Sources */,
+				51C989A628E3A65800B853E1 /* TerrainRenderer.cpp in Sources */,
 				51B72D5128DFCA1F009B7F2E /* Pipelines.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,6 +454,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 24RQ6S678Q;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"TARGET_MACOS=1",
 					"DEBUG=1",
@@ -455,6 +496,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 24RQ6S678Q;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "TARGET_MACOS=1";
 				GENERATE_INFOPLIST_FILE = NO;
 				HEADER_SEARCH_PATHS = (
